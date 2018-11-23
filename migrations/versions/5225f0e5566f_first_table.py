@@ -39,4 +39,3 @@ def downgrade():
     Drop positions and candidates tables
     """
     op.drop_table('page_info')
-    pass
