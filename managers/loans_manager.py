@@ -1,5 +1,6 @@
 from models import db, Loans
 from utils.db_utils import create_autocommit_session
+from schemas.LoanSchema import LoanSchema
 from sqlalchemy import func
 
 class LoanManager(object):
@@ -30,5 +31,17 @@ class LoanManager(object):
                     product_type = loan_data['product_type']
                 )
                 session.add(obj)
+        except Exception as e:
+            raise
+
+    @staticmethod
+    def get_all():
+        try:
+            session = create_autocommit_session(db)
+            with session.begin():
+                loans = session.query(Loans).all()
+                loans_fields = ('id', 'count_id', 'value', 'interest', 'sold_percent', 'investor', 'product_type')
+                loans_schema = LoanSchema(many=True, only=loans_fields)
+            return loans_schema.dump(loans).data
         except Exception as e:
             raise

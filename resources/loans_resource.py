@@ -9,15 +9,9 @@ class LoansResource(Resource):
         return {}, 200
 
     def get(self):
-        loans = [
-            'Elemento 1 de la lista',
-            'Elemento 2 de la lista',
-            'Elemento 3 de la lista',
-            'Elemento 4 de la lista'
-        ]
         return jsonify({
             'data': {
-                'loans': loans
+                'loans': LoanController.get_all()
             }
         })
 
