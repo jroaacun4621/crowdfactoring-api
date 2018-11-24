@@ -18,7 +18,7 @@ class LoanManager(object):
             raise
 
     @staticmethod
-    def create(loan_data):
+    def create(loan_data, user_id):
         try:
             session = create_autocommit_session(db)
             with session.begin():
@@ -28,18 +28,19 @@ class LoanManager(object):
                     interest = loan_data['interest'],
                     sold_percent = loan_data['sold_percent'],
                     investor = loan_data['investor'],
-                    product_type = loan_data['product_type']
+                    product_type = loan_data['product_type'],
+                    user_id=user_id
                 )
                 session.add(obj)
         except Exception as e:
             raise
 
     @staticmethod
-    def get_all():
+    def get_all(user_id):
         try:
             session = create_autocommit_session(db)
             with session.begin():
-                loans = session.query(Loans).all()
+                loans = session.query(Loans).filter_by(user_id=user_id).all()
                 loans_fields = ('id', 'count_id', 'value', 'interest', 'sold_percent', 'investor', 'product_type')
                 loans_schema = LoanSchema(many=True, only=loans_fields)
             return loans_schema.dump(loans).data
