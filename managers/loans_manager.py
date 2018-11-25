@@ -40,7 +40,7 @@ class LoanManager(object):
         try:
             session = create_autocommit_session(db)
             with session.begin():
-                loans = session.query(Loans).filter_by(user_id=user_id).all()
+                loans = session.query(Loans).all()
                 loans_fields = ('id', 'count_id', 'value', 'interest', 'sold_percent', 'investor', 'product_type')
                 loans_schema = LoanSchema(many=True, only=loans_fields)
             return loans_schema.dump(loans).data
